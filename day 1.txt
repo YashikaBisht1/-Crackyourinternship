@@ -1,0 +1,86 @@
+Array:
+q1)
+- using two pointers method t.c O(n^2)
+- using binary search method t.c O(log n)
+- using slow and fast pointer(hare and tortoise method)
+- using unordered_map
+  
+  class Solution {
+public:
+    int findDuplicate(vector<int>& nums) {
+        unordered_map<int,int> mp;//works best for unsorted array too
+        for(int num : nums)
+            mp[num]++;
+        
+        for(int i=0; i<nums.size(); i++){
+            if(mp[nums[i]] > 1){ // Checking if the element is duplicated
+                return nums[i];
+            }
+        }
+        
+        return -1; // If no duplicate is found, return -1 (or any other appropriate value)
+    }
+};
+q2)
+  class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int zeros = 0, ones = 0, n = nums.size();
+        for(int num : nums) {
+            if(num == 0) zeros++;
+            else if(num == 1) ones++;
+        }  
+
+        for(int i = 0; i < zeros; ++i) {
+            nums[i] = 0;
+        }
+
+        for(int i = zeros; i < zeros + ones; ++i) {
+            nums[i] = 1;
+        }
+
+        for(int i = zeros + ones; i < n; ++i) {
+            nums[i] = 2;
+        }
+    }
+};
+q3)remove duplicate fromo sorted array
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int j = 1;
+        for(int i = 1; i < nums.size(); i++){
+            if(nums[i] != nums[i - 1]){
+                nums[j] = nums[i];
+                j++;
+            }
+        }
+        return j;
+    }
+};
+q4)
+  class Solution { //time complexity:O(n*m)
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        int m = matrix[0].size();
+        unordered_set<int> setRows; 
+        unordered_set<int> setColumns; 
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                if(matrix[i][j] == 0){
+                    setRows.insert(i);
+                    setColumns.insert(j);
+                }
+            }
+        }
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                if(setRows.count(i) > 0 || setColumns.count(j) > 0){
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+    }
+};
+  
