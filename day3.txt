@@ -1,0 +1,99 @@
+q1
+  class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>>ans;
+        int n=nums.size();
+        sort(nums.begin(),nums.end());//sort the array
+        //now take three pointer 1 is fixed and 2 are moving
+        for(int i=0;i<n;i++){
+            if(i!=0 && nums[i]==nums[i-1]) continue;//remove duplicates
+            int j=i+1;
+            int k=n-1;
+            while(j<k){
+                int sum=nums[i]+nums[j]+nums[k];
+                if(sum<0){
+                    j++;//include more postive numbers
+                }
+                else if(sum>0){
+                    k--;//include more negative numbers
+                }
+                else{
+                    vector<int>temp={nums[i],nums[j],nums[k]};
+                    ans.push_back(temp);
+                    j++;
+                    k--;
+                    while (j < k && nums[j] ==nums[j - 1]) j++;
+                    while (j < k && nums[k] == nums[k + 1]) k--;
+                }
+            }
+        }
+        return ans;
+    }
+};
+q2
+  class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+        vector<vector<int>> output;
+        for(int i=0; i<n-3; i++){
+            for(int j=i+1; j<n-2; j++){
+                long long newTarget = (long long)target - (long long)nums[i] - (long long)nums[j];
+                int low = j+1, high = n-1;
+                while(low < high){
+                    if(nums[low] + nums[high] < newTarget){
+                        low++;
+                    }
+                    else if(nums[low] + nums[high] > newTarget){
+                        high--;
+                    }
+                    else{
+                        output.push_back({nums[i], nums[j], nums[low], nums[high]});
+                        int tempIndex1 = low, tempIndex2 = high;
+                        while(low < high && nums[low] == nums[tempIndex1]) low++;
+                        while(low < high && nums[high] == nums[tempIndex2]) high--;
+                    }
+                }
+                while(j+1 < n && nums[j] == nums[j+1]) j++;
+            }
+            while(i+1 < n && nums[i] == nums[i+1])i++;
+        }
+        return output;
+    }
+};
+q3
+  class Solution {
+public:
+    int subarraysDivByK(std::vector<int>& nums, int k) {
+        // Initialize count of subarrays, prefix sum, and hash map for remainders
+        int count = 0;
+        int prefixSum = 0;
+        std::unordered_map<int, int> prefixMap;
+        prefixMap[0] = 1; // To handle subarrays that start from the beginning
+
+        for (int num : nums) {
+            // Update prefix sum
+            prefixSum += num;
+            
+            // Calculate the remainder of the prefix sum divided by k
+            int mod = prefixSum % k;
+            
+            // Adjust negative remainders to be positive
+            if (mod < 0) {
+                mod += k;
+            }
+            
+            // If this remainder has been seen before, it means there are subarrays ending here that are divisible by k
+            if (prefixMap.find(mod) != prefixMap.end()) {
+                count += prefixMap[mod];
+                prefixMap[mod] += 1;
+            } else {
+                prefixMap[mod] = 1;
+            }
+        }
+        
+        return count; // Total number of subarrays divisible by k
+    }
+};
