@@ -1,0 +1,107 @@
+q1
+  class Solution {
+public:
+    vector<int> findDuplicates(vector<int>& nums) {
+        vector<int> ans;
+        for (const int num : nums) {
+            nums[abs(num) - 1] *= -1; // Mark the presence of num
+            if (nums[abs(num) - 1] > 0) {
+                ans.push_back(abs(num)); // Add to ans if already marked
+            }
+        }
+        return ans;
+    }
+};
+q2
+  class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        // find leftSmallest
+        // find righSmallest
+        // use formula maxA = max(maxA, heights[i] * (rightSmall[i] - leftSmall[i] + 1));
+        int n = heights.size();
+        stack<int> st;
+        int leftSmall[n];
+        int rightSmall[n];
+
+        // lets find the leftSmaller which will be used as a boundary for us
+        // the codes are almost similar for leftSaller and rightSmaller
+
+        for (int i = 0; i < n; i++) {
+
+            while (!st.empty() && heights[st.top()] >= heights[i]) {
+                st.pop();
+            }
+            if(st.empty()) leftSmall[i]=0;
+            else leftSmall[i]=st.top()+1;
+
+             st.push(i);
+        }
+
+        // Empty the stack as we will use it again for rightSmaller element
+        // It is better to pop() all the elements once you are done working with it
+        while (!st.empty()) {
+            st.pop();
+        }
+        // Now we have to find rightSmaller
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.empty() && heights[st.top()] >= heights[i]) {
+                st.pop();
+            }
+
+            if (st.empty()) rightSmall[i] = n - 1;
+            else  rightSmall[i] = st.top() - 1;
+            st.push(i);
+        }
+
+
+        int maxA = 0;
+        for (int i = 0; i < n; i++) {
+            maxA = max(maxA, heights[i] * (rightSmall[i] - leftSmall[i] + 1));
+        }
+
+        return maxA;
+
+
+        
+    }
+};
+q3 
+  class Solution {
+public:
+    
+int subarraySum(vector<int>& nums, int k) {
+        unordered_map<int,int> mp;
+        int sum=0,ans=0;
+        mp[sum] = 1;
+        for(auto it:nums){
+            sum += it;
+            int find = sum - k;
+            if(mp.find(find) != mp.end()){
+                ans += mp[find];
+            }
+            mp[sum]++;
+        }
+        return ans;
+
+    }
+};
+q4
+  class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int n = nums.size();
+        unordered_map<int, int> m;
+        
+        for(int i = 0; i < n; i++){
+            m[nums[i]]++;
+        }
+        n = n/2;
+        for(auto x: m){
+            if(x.second > n){
+                return x.first;
+            }
+        }
+        return 0;
+    }
+};
