@@ -1,0 +1,58 @@
+q1//use bfs with 8 directions to find minimum steps 
+  while(q_size != 0)
+       {
+           pair<int, int> val = q.front();
+           q.pop();
+           
+           int x1 = val.first;
+           int y1 = val.second;
+           // 8 direction to move horse their condition using x and y co-ordinate 
+           int ax[8] = { 2,2, -1, 1, -2, -2, -1, 1};
+           int ay[8] = { 1,-1, -2, -2, 1, -1, 2, 2};
+           // check each every co-ordinate is statisfy condition or not
+           for(int i=0; i<8; i++)
+           {
+               int x = ax[i]+x1;
+               int y = ay[i]+y1;
+               
+               if(x == Destiny_x && y == Destiny_y)
+                    return cnt;
+                    
+               if(Is_Valid(x, y, N, visited))
+               {
+                   visited[x][y] = true;
+                   q.push({x, y});
+               }
+           }
+}
+q2
+  bool dfs(int node,vector<vector<bool>>visited,vector<vector<int>>&graph){
+	visited[node]=2;
+	for(auto x:graph[node]){
+		if(!visited[x]){
+			if(dfs(x,visited,graph)==true)
+			return true;
+			}
+			else if(visited[it]==2){
+			return true;
+			}
+			}
+			visited[node]=1;
+			return false;
+			}
+vector<int>eventualSafeNodes(vector<vector<int>>&graph){
+	int V=graph.size();
+	vector<int>visited(V,0);
+	for(int i=0;i<V;i++){
+	if(!visited[i]){
+		dfs(i,visited,graph);
+		}
+	}
+	vector<int>safe_nodes;
+	for(int i = 0;i<V;i++){
+            if(visited[i] == 1){
+                safe_nodes.push_back(i);
+            }
+        }
+return safe_nodes;
+}
